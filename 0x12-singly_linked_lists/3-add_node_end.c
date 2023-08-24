@@ -1,41 +1,41 @@
 #include <stdlib.h>
 #include <string.h>
-#include "custom_lists.h"
+#include "lists.h"
 
 /**
- * custom_add_node_end - adds a new node at the end of a custom linked list
- * @head: double pointer to the custom_node_t list
- * @data: string to put in the new node
+ * add_node_end - adds a new node at the end of a linked list
+ * @head: double pointer to the list_t list
+ * @str: string to put in the new node
  *
- * Return: address of the new element, or NULL if it fails
+ * Return: address of the new element, or NULL if it failed
  */
-custom_node_t *custom_add_node_end(custom_node_t **head, const char *data)
+list_t *add_node_end(list_t **head, const char *str)
 {
-    custom_node_t *new_node;
-    custom_node_t *temp = *head;
-    unsigned int length = 0;
+    list_t *new;
+    list_t *temp = *head;
+    unsigned int len = 0;
 
-    while (data[length])
-        length++;
+    while (str[len])
+        len++;
 
-    new_node = malloc(sizeof(custom_node_t));
-    if (!new_node)
+    new = malloc(sizeof(list_t));
+    if (!new)
         return (NULL);
 
-    new_node->data = strdup(data);
-    new_node->length = length;
-    new_node->next = NULL;
+    new->str = strdup(str);
+    new->len = len;
+    new->next = NULL;
 
     if (*head == NULL)
     {
-        *head = new_node;
-        return (new_node);
+        *head = new;
+        return (new);
     }
 
     while (temp->next)
         temp = temp->next;
 
-    temp->next = new_node;
+    temp->next = new;
 
-    return (new_node);
+    return (new);
 }
