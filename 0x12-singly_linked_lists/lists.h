@@ -1,5 +1,5 @@
-#ifndef CUSTOM_LIST_H
-#define CUSTOM_LIST_H
+#ifndef LISTS_H
+#define LISTS_H
 
 /**
  * struct custom_node_s - singly linked list node
