@@ -1,19 +1,19 @@
 #include <stdlib.h>
-#include "lists.h"
+#include "custom_lists.h"
 
 /**
- * free_list - frees a linked list
- * @head: list_t list to be freed
+ * custom_free_list - frees a custom linked list
+ * @head: custom_node_t list to be freed
  */
-void free_list(list_t *head)
+void custom_free_list(custom_node_t *head)
 {
-	list_t *temp;
+    custom_node_t *temp;
 
-	while (head)
-	{
-		temp = head->next;
-		free(head->str);
-		free(head);
-		head = temp;
-	}
+    while (head)
+    {
+        temp = head->next;
+        free(head->data);
+        free(head);
+        head = temp;
+    }
 }

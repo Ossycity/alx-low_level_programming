@@ -1,13 +1,12 @@
 #include <stdio.h>
 
-void first(void) __attribute__ ((constructor));
+void custom_init(void) __attribute__ ((constructor));
 
 /**
- * first - prints a sentence before the main
- * function is executed
+ * custom_init - prints a custom message before the main function is executed
  */
-void first(void)
+void custom_init(void)
 {
-	printf("You're beat! and yet, you must allow,\n");
-	printf("I bore my house upon my back!\n");
+    printf("This is a custom initialization message.\n");
+    printf("Before the main function starts running.\n");
 }

@@ -1,20 +1,21 @@
 #include <stdlib.h>
-#include "lists.h"
+#include "custom_lists.h"
 
 /**
- * list_len - returns the number of elements in a linked list
- * @h: pointer to the list_t list
+ * custom_list_length - returns the number of elements in a custom linked list
+ * @head: pointer to the custom_node_t list
  *
- * Return: number of elements in h
+ * Return: number of elements in the custom list
  */
-size_t list_len(const list_t *h)
+size_t custom_list_length(const custom_node_t *head)
 {
-	size_t n = 0;
+    size_t count = 0;
 
-	while (h)
-	{
-		n++;
-		h = h->next;
-	}
-	return (n);
+    while (head)
+    {
+        count++;
+        head = head->next;
+    }
+
+    return (count);
 }

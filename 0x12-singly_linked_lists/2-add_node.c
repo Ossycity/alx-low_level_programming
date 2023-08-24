@@ -1,30 +1,30 @@
 #include <stdlib.h>
 #include <string.h>
-#include "lists.h"
+#include "custom_lists.h"
 
 /**
- * add_node - adds a new node at the beginning of a linked list
- * @head: double pointer to the list_t list
- * @str: new string to add in the node
+ * custom_add_node - adds a new node at the beginning of a custom linked list
+ * @head: double pointer to the custom_node_t list
+ * @data: new string to add in the node
  *
  * Return: the address of the new element, or NULL if it fails
  */
-list_t *add_node(list_t **head, const char *str)
+custom_node_t *custom_add_node(custom_node_t **head, const char *data)
 {
-	list_t *new;
-	unsigned int len = 0;
+    custom_node_t *new_node;
+    unsigned int length = 0;
 
-	while (str[len])
-		len++;
+    while (data[length])
+        length++;
 
-	new = malloc(sizeof(list_t));
-	if (!new)
-		return (NULL);
+    new_node = malloc(sizeof(custom_node_t));
+    if (!new_node)
+        return (NULL);
 
-	new->str = strdup(str);
-	new->len = len;
-	new->next = (*head);
-	(*head) = new;
+    new_node->data = strdup(data);
+    new_node->length = length;
+    new_node->next = (*head);
+    (*head) = new_node;
 
-	return (*head);
+    return (*head);
 }
