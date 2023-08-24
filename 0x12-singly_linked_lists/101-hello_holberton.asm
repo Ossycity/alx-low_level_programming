@@ -1,10 +1,10 @@
+section .data
+format db `Hello, Holberton\n`,0
+
+section .text
 global main
 extern printf
 
-section .data
-    format db `Welcome to the Assembly World!\n`,0
-
-section .text
 main:
     mov edi, format
     xor eax, eax
