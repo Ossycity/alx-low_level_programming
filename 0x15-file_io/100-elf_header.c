@@ -1,116 +1,77 @@
-#include <stdio.h>
 #include <elf.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void check_elf(unsigned char *e_ident);
+void print_magic(unsigned char *e_ident);
+void print_class(unsigned char *e_ident);
+void print_data(unsigned char *e_ident);
+void print_version(unsigned char *e_ident);
+void print_abi(unsigned char *e_ident);
+void print_osabi(unsigned char *e_ident);
+void print_type(unsigned int e_type, unsigned char *e_ident);
+void print_entry(unsigned long int e_entry, unsigned char *e_ident);
+void close_elf(int elf);
 
 /**
- * check_elf - Checks if a file is an ELF file
- * @e_ident: The ELF identification array
+ * main - Displays the information contained in the
+ * ELF header at the start of an ELF file.
+ * @argc: The number of arguments supplied to the program.
+ * @argv: An array of pointers to the arguments.
+ *
+ * Return: 0 on success, 98 on error.
  */
-void check_elf(unsigned char *e_ident)
+int main(int argc, char *argv[])
 {
-	printf("ELF Header:\n");
-	printf("  Magic:   ");
-	for (i = 0; i < EI_NIDENT; i++)
-	{
-		printf("%02x", e_ident[i]);
-		if (i < EI_NIDENT - 1)
-			printf(" ");
-		else
-			printf("\n");
-	}
+    if (argc != 2)
+    {
+        fprintf(stderr, "Usage: %s <ELF file>\n", argv[0]);
+        return 98; // Exit with an error code for incorrect usage.
+    }
 
-	/* Rest of the code for checking ELF */
-}
+    Elf64_Ehdr *header;
+    int o, r;
 
-/**
- * print_magic - Prints the ELF magic number
- * @e_ident: The ELF identification array
- */
-void print_magic(unsigned char *e_ident)
-{
-	/* Code for printing magic number */
-}
+    o = open(argv[1], O_RDONLY);
+    if (o == -1)
+    {
+        perror("Error");
+        return 98; // Exit with an error code.
+    }
 
-/**
- * print_class - Prints the ELF file class
- * @class: The ELF file class value
- */
-void print_class(unsigned char class)
-{
-	/* Code for printing ELF class */
-}
+    header = malloc(sizeof(Elf64_Ehdr));
+    if (header == NULL)
+    {
+        perror("Error");
+        close_elf(o);
+        return 98; // Exit with an error code.
+    }
 
-/**
- * print_data - Prints the ELF data encoding
- * @data: The ELF data encoding value
- */
-void print_data(unsigned char data)
-{
-	/* Code for printing ELF data encoding */
-}
+    r = read(o, header, sizeof(Elf64_Ehdr));
+    if (r != sizeof(Elf64_Ehdr))
+    {
+        fprintf(stderr, "Error: Incomplete read of ELF header.\n");
+        free(header);
+        close_elf(o);
+        return 98; // Exit with an error code.
+    }
 
-/**
- * print_version - Prints the ELF version
- * @version: The ELF version value
- */
-void print_version(unsigned char version)
-{
-	/* Code for printing ELF version */
-}
+    check_elf(header->e_ident);
+    printf("ELF Header:\n");
+    print_magic(header->e_ident);
+    print_class(header->e_ident);
+    print_data(header->e_ident);
+    print_version(header->e_ident);
+    print_osabi(header->e_ident);
+    print_abi(header->e_ident);
+    print_type(header->e_type, header->e_ident);
+    print_entry(header->e_entry, header->e_ident);
 
-/**
- * print_osabi - Prints the ELF OS/ABI
- * @osabi: The ELF OS/ABI value
- */
-void print_osabi(unsigned char osabi)
-{
-	/* Code for printing ELF OS/ABI */
-}
-
-/**
- * print_abi - Prints the ELF ABI version
- * @abi: The ELF ABI version value
- */
-void print_abi(unsigned char abi)
-{
-	/* Code for printing ELF ABI version */
-}
-
-/**
- * print_type - Prints the ELF file type
- * @type: The ELF file type value
- */
-void print_type(unsigned short type)
-{
-	/* Code for printing ELF file type */
-}
-
-/**
- * print_entry - Prints the ELF entry point address
- * @entry: The ELF entry point address value
- */
-void print_entry(Elf64_Addr entry)
-{
-	/* Code for printing ELF entry point address */
-}
-
-/**
- * close_elf - Closes an ELF file
- * @fd: The file descriptor of the ELF file
- */
-void close_elf(int fd)
-{
-	/* Code for closing ELF file */
-}
-
-/**
- * main - Entry point
- * @argc: The number of command-line arguments
- * @argv: The command-line arguments
- * @envp: The environment variables
- * Return: 0 on success, otherwise an error code
- */
-int main(int argc, char *argv[], char *envp[])
-{
-	/* Main code for checking and printing ELF file information */
-	return (0);
+    free(header);
+    close_elf(o);
+    return 0; // Exit successfully.
 }
